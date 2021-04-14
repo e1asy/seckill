@@ -4,5 +4,18 @@ spring:
     url: jdbc:mysql://localhost:3306/seckill?useSSL=false&useUnicode=true&characterEncoding=utf8
     username: root
     password: root980110
+    # 配置druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+
+#mybatis:
+#  mapper-locations: com/ncepu/seckill/mapper/*.xml
+#  configuration:
+#    use-generated-keys: true
+#    use-column-label: true
+#    map-underscore-to-camel-case: true
+#  # 配置实体所在的类所在路径
+server:
+  port: 8090
 mybatis:
-  mapper-locations: com/ncepu/seckill/mapper/*.xml
+  mapper-locations: classpath:mapping/*.xml
+#  type-aliases-package: com.ncepu.seckill.entity
