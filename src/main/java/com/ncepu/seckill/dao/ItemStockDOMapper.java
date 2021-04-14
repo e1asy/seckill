@@ -1,6 +1,7 @@
 package com.ncepu.seckill.dao;
 
 import com.ncepu.seckill.dataobject.ItemStockDO;
+import org.apache.ibatis.annotations.Param;
 
 public interface ItemStockDOMapper {
 
@@ -17,4 +18,6 @@ public interface ItemStockDOMapper {
     int updateByPrimaryKeySelective(ItemStockDO record);
 
     int updateByPrimaryKey(ItemStockDO record);
+
+    int decreaseStock(@Param("itemId") Integer itemId, @Param("amount") Integer amount);
 }

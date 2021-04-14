@@ -9,11 +9,10 @@ public class UserDO {
     private String telphone;
     private String registerMode;
     private String thirdPartId;
+
     public Integer getId() {
         return id;
     }
-
-
     public void setId(Integer id) {
         this.id = id;
     }
@@ -47,10 +46,12 @@ public class UserDO {
     public void setRegisterMode(String registerMode) {
         this.registerMode = registerMode == null ? null : registerMode.trim();
     }
+
     public String getThirdPartId() {
         return thirdPartId;
     }
+
     public void setThirdPartId(String thirdPartId) {
-        this.thirdPartId = thirdPartId == null ? null : thirdPartId.trim();
+        this.thirdPartId = thirdPartId;
     }
 }

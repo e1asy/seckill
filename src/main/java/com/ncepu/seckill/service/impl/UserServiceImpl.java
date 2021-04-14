@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
         try {
             userDOMapper.insertSelective(userDO); // 为什么这里要使用insertSelective方法？
         } catch(DuplicateKeyException ex) {
-            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "手机号以重复");
+            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "手机号已重复");
         }
         userModel.setId(userDO.getId()); // 这一步可太坑了，userModel本没有id，因为insertSelect插入时对主键自增，所以userDO便有了id
         UserPasswordDO userPasswordDO = convertPasswordFromModel(userModel);
