@@ -5,6 +5,7 @@ import com.ncepu.seckill.error.BusinessException;
 import com.ncepu.seckill.response.CommonReturnType;
 import com.ncepu.seckill.service.ItemService;
 import com.ncepu.seckill.service.model.ItemModel;
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -75,6 +76,15 @@ public class ItemController  extends BaseController {
         }
         ItemVO itemVO = new ItemVO();
         BeanUtils.copyProperties(itemModel, itemVO);
+        if (itemModel.getPromoModel() != null) {
+            // 有正在进行或即将进行的秒杀活动
+            itemVO.setPromoStatus(itemModel.getPromoModel().getStatus());
+            itemVO.setPromoId(itemModel.getPromoModel().getId());
+            itemVO.setStartDate(itemModel.getPromoModel().getStartDate().toString(DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")));
+            itemVO.setPromoPrice(itemModel.getPromoModel().getPromoItemPrice());
+        } else {
+            itemVO.setPromoStatus(0);
+        }
         return itemVO;
     }
 }

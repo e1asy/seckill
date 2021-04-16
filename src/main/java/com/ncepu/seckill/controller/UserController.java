@@ -88,7 +88,6 @@ public class UserController extends BaseController {
         return newstr;
     }
 
-
     // 用户获取otp短信接口
     @RequestMapping(value = "/getotp", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody

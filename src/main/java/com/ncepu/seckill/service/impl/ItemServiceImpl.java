@@ -7,7 +7,9 @@ import com.ncepu.seckill.dataobject.ItemStockDO;
 import com.ncepu.seckill.error.BusinessException;
 import com.ncepu.seckill.error.EmBusinessError;
 import com.ncepu.seckill.service.ItemService;
+import com.ncepu.seckill.service.PromoService;
 import com.ncepu.seckill.service.model.ItemModel;
+import com.ncepu.seckill.service.model.PromoModel;
 import com.ncepu.seckill.validator.ValidationResult;
 import com.ncepu.seckill.validator.ValidatorImpl;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +28,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Autowired
     private ItemDOMapper itemDOMapper;
+
+    @Autowired
+    private PromoService promoService;
 
     @Autowired
     private ItemStockDOMapper itemStockDOMapper;
@@ -97,6 +102,11 @@ public class ItemServiceImpl implements ItemService {
         // 将dataobject -> model
         ItemModel itemModel = convertModelFromDataObject(itemDO, itemStockDO);
 
+        // 获取活动商品信息
+        PromoModel promoModel = promoService.getPromoByItemId(itemModel.getId());
+        if (promoModel != null && promoModel.getStatus().intValue() != 3) {
+            itemModel.setPromoModel(promoModel);
+        }
         return itemModel;
     }
 

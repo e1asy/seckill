@@ -28,12 +28,15 @@ public class ItemVO {
     private String imgUrl;
 
     //商品是否在秒杀活动中以及对应的状态
-    private Integer promoStatus;
+    private Integer promoStatus; //0: 没有秒杀，1: 秒杀活动待开始，2: 秒杀活动进行中
 
+    // 秒杀活动价格
     private BigDecimal promoPrice;
 
+    // 秒杀活动id
     private Integer promoId;
 
+    // 秒杀开始时间
     private String startDate;
 
     public Integer getId() {

@@ -40,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderModel createOrder(Integer userId, Integer itemId, Integer amount) throws BusinessException {
+    public OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount) throws BusinessException {
 
         // 1.校验下单状态，下单商品是否存在，用户是否合法，购买数量是否正确
         ItemModel itemModel = itemService.getItemById(itemId);
@@ -56,6 +56,18 @@ public class OrderServiceImpl implements OrderService {
         if (amount <= 0 || amount > 99) {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "数量信息不正确");
         }
+
+        // 校验活动信息
+        if (promoId != null) {
+            // （1）校验对应活动是否存在这个适用商品
+            if (promoId.intValue() != itemModel.getPromoModel().getId()) {
+                throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "活动信息不正确");
+                // （2）校验活动是否正在进行中
+            } else if (itemModel.getPromoModel().getStatus().intValue() != 2) {
+                throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "活动尚未开始");
+            }
+        }
+
         // 2.落单减库存 或 支付减库存
         // 1）落单减库存：在调用createOrder前将某一库存信息锁（关键字：锁）定给该用户使用（存在恶意下单不付钱的情况）
         // 2）支付减库存：在createOrder时查看余量，大于0，即可以供其下单，直到支付宝/微信完成支付后，再减库存（无法保证超卖情况）
@@ -68,8 +80,15 @@ public class OrderServiceImpl implements OrderService {
         orderModel.setUserId(userId);
         orderModel.setItemId(itemId);
         orderModel.setAmount(amount);
-        orderModel.setItemPrice(itemModel.getPrice());
-        orderModel.setOrderPrice(itemModel.getPrice().multiply(new BigDecimal(amount)));
+
+        if (promoId != null) { // 促销价格
+            orderModel.setItemPrice(itemModel.getPromoModel().getPromoItemPrice());
+        } else { // 平销价格
+            orderModel.setItemPrice(itemModel.getPrice());
+        }
+
+        orderModel.setPromoId(promoId);
+        orderModel.setOrderPrice(orderModel.getItemPrice().multiply(new BigDecimal(amount)));
 
         // 订单号在数据库中设计的不是自增，它的生成是有特定规则的
         orderModel.setId(generateOrderNo()); // 生成交易流水号
