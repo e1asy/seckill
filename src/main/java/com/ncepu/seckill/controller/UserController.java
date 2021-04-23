@@ -60,11 +60,16 @@ public class UserController extends BaseController {
                                      @RequestParam(name = "name")String name,
                                      @RequestParam(name = "gender")Integer gender,
                                      @RequestParam(name = "age")Integer age,
-                                     @RequestParam(name = "password")String password) throws BusinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
+                                     @RequestParam(name = "password")String password,
+                                     @RequestParam(name = "repeat_password")String repeat_password) throws BusinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
         // 验证手机号与对应的otpcode相符合
         String inSessionOtpCode = (String) this.httpServletRequest.getSession().getAttribute(telphone);
         if (!com.alibaba.druid.util.StringUtils.equals(otpCode, inSessionOtpCode)) {
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "短信验证码不一致");
+        }
+        // 验证两次密码填写是否一致
+        if (!StringUtils.equals(password, repeat_password)) {
+            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR, "两次密码输入不一致");
         }
         // 用户的注册流程
         UserModel userModel = new UserModel();

@@ -3,13 +3,14 @@ package com.ncepu.seckill.service.model;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * 该model为领域模型
  * 以后先设计领域模型再设计数据库表结构
  */
-public class ItemModel {
+public class ItemModel implements Serializable {
 
     private Integer id;
 

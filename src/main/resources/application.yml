@@ -6,6 +6,16 @@ spring:
     password: root980110
     # 配置druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
+  # 配置springboot对redis的依赖
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 10
+    # 设置jedis连接池
+    jedis:
+      pool:
+        max-active: 50
+        min-idle: 20
 
 #mybatis:
 #  mapper-locations: com/ncepu/seckill/mapper/*.xml
@@ -19,3 +29,5 @@ server:
 mybatis:
   mapper-locations: classpath:mapping/*.xml
 #  type-aliases-package: com.ncepu.seckill.entity
+
+
